@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+:root {
+  --paper-warm: #EDE6D8;
+  --paper-deep: #E2D9C6;
+  --ink-black: #141414;
+  --ink-muted: #4E4940;
+  --signal-vermilion: #E8452C;
+  --teal-deep: #0F5E5A;
+  --unit-led-green: #3DFF7A;
+}
+
+@layer base {
+  html {
+    background-color: var(--paper-warm);
+    color: var(--ink-black);
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: clip;
+  }
+
+  html[dir="rtl"] body {
+    font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Bricolage Grotesque', serif;
+    line-height: 2;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Archivo Black', 'Bricolage Grotesque', sans-serif;
+  }
+
+  .font-urdu-graphic {
+    font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif;
+    line-height: 1.85;
+  }
+
+  .font-mono-data {
+    font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3,
+html[dir="rtl"] .font-display {
+  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Archivo Black', serif;
+  letter-spacing: 0 !important;
+  line-height: 1.65;
+  padding-top: 0.12em;
+  padding-bottom: 0.12em;
+}
+
+.lang-fade {
+  transition: opacity 180ms ease-out;
+}
+
+/* Tactile newsprint / concrete paper grain */
+.paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.045'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* Hard printed offset button / card shadows (no glow) */
+.print-shadow {
+  box-shadow: 4px 4px 0 0 #141414;
+}
+
+.print-shadow-sm {
+  box-shadow: 3px 3px 0 0 #141414;
+}
+
+.print-shadow-vermilion {
+  box-shadow: 4px 4px 0 0 #E8452C;
+}
+
+/* Offset-print misalignment registration text shadow */
+.print-misalign {
+  text-shadow: 3px 2px 0 rgba(232, 69, 44, 0.35), -2px -1px 0 rgba(15, 94, 90, 0.25);
+}
+
+/* Giant outline Urdu display treatment */
+.urdu-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(20, 20, 20, 0.28);
+}
+
+.hero-blackout .urdu-outline {
+  -webkit-text-stroke: 1.5px rgba(237, 230, 216, 0.24);
+}
+
+/* Translucent HUD ONLY used directly over real photography in Interactive Inspection */
+.photo-hud {
+  background: rgba(20, 20, 20, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(237, 230, 216, 0.24);
+}
+
+/* Keyframes for real unit blower fan rotation */
+@keyframes fan-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-fan-spin {
+  animation: fan-spin 0.42s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fan-spin {
+    animation: none;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--signal-vermilion);
+  outline-offset: 2px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

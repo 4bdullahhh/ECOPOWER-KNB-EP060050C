@@ -1,0 +1,6 @@
+{
+  "name": "ECOPOWER KNB-EP060050C",
+  "description": "600 Wh / 500 W silent lithium battery backup generator. Designed in California, made in Karachi by Kazi & Brothers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
