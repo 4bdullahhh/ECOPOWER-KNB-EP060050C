@@ -11,10 +11,9 @@ export type SwitchMode = 'ON' | 'OFF' | 'STANDBY';
 
 interface HeroBlackoutProps {
   lang: Lang;
-  onToggleLang: (next: Lang) => void;
 }
 
-export function HeroBlackout({ lang, onToggleLang }: HeroBlackoutProps) {
+export function HeroBlackout({ lang }: HeroBlackoutProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const productRef = useRef<HTMLDivElement>(null);
   const standbyTimerRef = useRef<number | null>(null);
@@ -144,7 +143,7 @@ export function HeroBlackout({ lang, onToggleLang }: HeroBlackoutProps) {
     <section
       id="hero"
       ref={sectionRef}
-      className={`relative min-h-screen w-full overflow-hidden pt-20 pb-14 flex flex-col justify-between transition-colors ${
+      className={`relative min-h-screen w-full overflow-hidden pt-20 sm:pt-24 pb-14 flex flex-col justify-between transition-colors ${
         flickering ? 'duration-75' : 'duration-500'
       } ${
         roomLit
@@ -183,10 +182,9 @@ export function HeroBlackout({ lang, onToggleLang }: HeroBlackoutProps) {
         )}
       </div>
 
-      {/* Top Row: Karachi Street Shop-Sign Outage Clock + Stamped Status + EN/اردو Switch */}
-      <div className="relative z-[60] mx-auto w-full max-w-[1440px] px-6 sm:px-10 flex flex-wrap items-start justify-between gap-4">
-        {/* Street Shop-Sign Digital Outage Clock */}
-        <div className="flex flex-wrap items-center gap-4">
+      {/* Top Row: Karachi Street Shop-Sign Outage Clock + Stamped Status */}
+      <div className="relative z-30 mx-auto w-full max-w-[1440px] px-4 sm:px-10 flex flex-wrap items-start justify-between gap-3 sm:gap-4">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
           <div
             className={`relative px-4 py-2.5 border-2 transition-colors ${
               roomLit
@@ -222,76 +220,67 @@ export function HeroBlackout({ lang, onToggleLang }: HeroBlackoutProps) {
                 : t.stampPower}
           </div>
         </div>
-
-        {/* EN / اردو Language Toggle */}
-        <div
-          role="group"
-          aria-label={t.ariaLangToggle}
-          className={`relative z-[60] inline-flex border-2 bg-[#EDE6D8] text-[#141414] print-shadow-sm ${
-            roomLit ? 'border-[#141414]' : 'border-[#EDE6D8]'
-          }`}
-        >
-          <button
-            type="button"
-            aria-pressed={lang === 'en'}
-            onClick={() => onToggleLang('en')}
-            className={`min-h-[38px] px-3.5 py-1.5 text-xs font-mono-data font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer touch-manipulation ${
-              lang === 'en'
-                ? 'bg-[#E8452C] text-[#EDE6D8]'
-                : 'bg-[#EDE6D8] text-[#141414] hover:bg-[#E2D9C6]'
-            }`}
-          >
-            EN
-          </button>
-          <button
-            type="button"
-            aria-pressed={lang === 'ur'}
-            onClick={() => onToggleLang('ur')}
-            className={`min-h-[38px] px-3.5 py-1.5 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer touch-manipulation border-s-2 ${
-              roomLit ? 'border-[#141414]' : 'border-[#141414]'
-            } ${
-              lang === 'ur'
-                ? 'bg-[#E8452C] text-[#EDE6D8]'
-                : 'bg-[#EDE6D8] text-[#141414] hover:bg-[#E2D9C6]'
-            }`}
-          >
-            اردو
-          </button>
-        </div>
       </div>
 
-      {/* Main Overlapping Composition: Giant Type Partly Behind Huge Edge-Cropped Product */}
-      <div className="relative z-20 mx-auto w-full max-w-[1440px] px-6 sm:px-10 my-auto py-6">
-        <div className="relative grid grid-cols-1 lg:grid-cols-12 items-center gap-8">
-          {/* Giant Urdu Outline Echo + Display Headline (z-10 so it sits partly behind product) */}
-          <div className="lg:col-span-8 relative z-10 pointer-events-none select-none">
+      {/* Main Composition: Non-overlapping Echo + Solid Headline beside Edge-Cropped Product */}
+      <div className="relative z-20 mx-auto w-full max-w-[1440px] px-4 sm:px-10 my-auto pt-8 pb-4 sm:py-6">
+        <div className="relative grid grid-cols-1 lg:grid-cols-12 items-center gap-6 lg:gap-8">
+          {/* Echo Line ABOVE + Main Solid Headline (own flow, zero overlap) */}
+          <div className="lg:col-span-7 relative z-20 pointer-events-none select-none hero-reveal">
+            {/* Outlined Secondary Language Echo ABOVE the solid headline */}
             <div
               aria-hidden="true"
-              className="font-urdu-graphic urdu-outline text-5xl sm:text-7xl lg:text-8xl font-bold mb-1"
+              className={
+                lang === 'en'
+                  ? 'urdu-outline font-urdu-graphic font-bold mb-3 sm:mb-4 lg:mb-5'
+                  : 'urdu-outline font-display uppercase tracking-tight mb-3 sm:mb-4 lg:mb-5'
+              }
+              style={
+                lang === 'en'
+                  ? {
+                      fontSize: 'clamp(1.6rem, 4.3vw, 4rem)',
+                      lineHeight: 1.8,
+                    }
+                  : {
+                      fontSize: 'clamp(1.35rem, 3.4vw, 3rem)',
+                      lineHeight: 1.15,
+                    }
+              }
             >
-              {t.urduEcho}
+              {t.echoLine}
             </div>
 
             <h1
-              className="font-display uppercase leading-[0.9] tracking-tight print-misalign"
-              style={{
-                fontSize: 'clamp(3.1rem, 8.2vw, 7.25rem)',
-                textWrap: 'balance',
-              }}
+              className={`font-display print-misalign ${
+                lang === 'en'
+                  ? 'uppercase tracking-tight leading-[0.96]'
+                  : ''
+              }`}
+              style={
+                lang === 'en'
+                  ? {
+                      fontSize: 'clamp(2.125rem, 4.8vw, 4.75rem)',
+                      lineHeight: 0.96,
+                    }
+                  : {
+                      fontSize: 'clamp(2.125rem, 5vw, 4.25rem)',
+                      lineHeight: 1.65,
+                    }
+              }
             >
-              <span className="block">{t.headlineLine1}</span>
-              <span className="block">{t.headlineLine2}</span>
+              <span className="block sm:whitespace-nowrap">{t.headlineLine1}</span>
+              <span className="block sm:whitespace-nowrap">{t.headlineLine2}</span>
             </h1>
           </div>
 
-          {/* Huge Product Cropped Off the Inline-End Edge (z-20 overlapping headline) */}
+          {/* Product Cutout (kept clear of headline columns & buttons) */}
           <div
             ref={productRef}
-            className="lg:col-span-6 lg:col-start-7 lg:-mt-24 lg:-me-36 relative z-20 flex flex-col items-end"
+            className="lg:col-span-5 relative z-10 flex flex-col items-end lg:-me-14 xl:-me-24"
           >
             <div
               dir="ltr"
-              className="relative w-full max-w-[740px] ltr:lg:translate-x-14 rtl:lg:-translate-x-14"
+              className="relative w-full max-w-[540px] lg:max-w-[660px] mx-auto lg:mx-0"
             >
               {/* Realistic Floor Contact Shadow */}
               <div
@@ -401,7 +390,7 @@ export function HeroBlackout({ lang, onToggleLang }: HeroBlackoutProps) {
         </div>
 
         {/* Lower Hero Interactive Bar: Subhead + Two CTAs + Tactile 3-Position Switch */}
-        <div className="relative z-30 mt-6 lg:-mt-16 grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+        <div className="relative z-30 mt-6 lg:mt-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
           {/* Subhead + 2 CTAs + Trust Line */}
           <div className="lg:col-span-6 space-y-5">
             <p
@@ -418,7 +407,6 @@ export function HeroBlackout({ lang, onToggleLang }: HeroBlackoutProps) {
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                data-cursor="magnetic"
                 className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#E8452C] text-[#EDE6D8] border-2 border-[#141414] print-shadow font-bold text-sm sm:text-base hover:translate-x-[2px] hover:translate-y-[2px] transition-transform whitespace-nowrap shrink-0"
               >
                 <MessageCircle className="w-5 h-5" aria-hidden="true" />

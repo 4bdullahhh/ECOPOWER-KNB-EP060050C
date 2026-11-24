@@ -1,4 +1,4 @@
-import { MessageCircle, Phone } from 'lucide-react';
+import { Mail, MessageCircle, Phone } from 'lucide-react';
 import { COPY, Lang } from '../i18n/translations';
 import { PRODUCT_CONFIG, buildWhatsAppUrl } from '../config/productConfig';
 
@@ -12,6 +12,7 @@ export function FinalCtaAndFooter({ lang }: FinalCtaAndFooterProps) {
 
   const whatsappHref = buildWhatsAppUrl(t.prefillMessage);
   const telHref = `tel:${PRODUCT_CONFIG.phone}`;
+  const mailHref = `mailto:${PRODUCT_CONFIG.supportEmail}`;
 
   return (
     <>
@@ -43,7 +44,6 @@ export function FinalCtaAndFooter({ lang }: FinalCtaAndFooterProps) {
                   href={whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  data-cursor="magnetic"
                   className="inline-flex items-center justify-center gap-2.5 px-7 py-4 bg-[#E8452C] text-[#EDE6D8] border-2 border-[#141414] print-shadow font-bold text-base hover:translate-x-[2px] hover:translate-y-[2px] transition-transform whitespace-nowrap shrink-0"
                 >
                   <MessageCircle className="w-5 h-5 shrink-0" aria-hidden="true" />
@@ -59,12 +59,25 @@ export function FinalCtaAndFooter({ lang }: FinalCtaAndFooterProps) {
                 </a>
               </div>
 
-              <p className="font-mono-data text-sm font-bold text-[#141414]">
-                {t.phoneLabel}:{' '}
-                <span dir="ltr" className="inline-block">
-                  {PRODUCT_CONFIG.phoneDisplay}
-                </span>
-              </p>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2.5">
+                <p className="font-mono-data text-sm font-bold text-[#141414]">
+                  {t.phoneLabel}:{' '}
+                  <span dir="ltr" className="inline-block">
+                    {PRODUCT_CONFIG.phoneDisplay}
+                  </span>
+                </p>
+
+                <a
+                  href={mailHref}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#E2D9C6] text-[#141414] border-2 border-[#141414] print-shadow-sm font-mono-data text-xs font-bold hover:bg-[#141414] hover:text-[#EDE6D8] transition-colors max-w-full"
+                >
+                  <Mail className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  <span className="shrink-0">{t.emailLabel}:</span>
+                  <span dir="ltr" className="inline-block truncate">
+                    {PRODUCT_CONFIG.supportEmail}
+                  </span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -88,12 +101,6 @@ export function FinalCtaAndFooter({ lang }: FinalCtaAndFooterProps) {
               {PRODUCT_CONFIG.websiteDisplay}
             </a>
             <a
-              href={`mailto:${PRODUCT_CONFIG.supportEmail}`}
-              className="hover:text-[#E8452C] transition-colors"
-            >
-              {PRODUCT_CONFIG.supportEmail}
-            </a>
-            <a
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
@@ -108,6 +115,16 @@ export function FinalCtaAndFooter({ lang }: FinalCtaAndFooterProps) {
               {tf.phoneLabel}:{' '}
               <span dir="ltr" className="inline-block">
                 {PRODUCT_CONFIG.phoneDisplay}
+              </span>
+            </a>
+            <a
+              href={mailHref}
+              className="inline-flex items-center gap-1.5 hover:text-[#E8452C] transition-colors"
+            >
+              <Mail className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              <span>{tf.emailLabel}:</span>
+              <span dir="ltr" className="inline-block">
+                {PRODUCT_CONFIG.supportEmail}
               </span>
             </a>
           </div>

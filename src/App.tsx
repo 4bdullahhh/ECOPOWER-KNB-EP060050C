@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { COPY, Lang } from './i18n/translations';
-import { CustomCursor } from './components/CustomCursor';
 import { Navbar } from './components/Navbar';
 import { HeroBlackout } from './components/HeroBlackout';
 import { ProblemStrip } from './components/ProblemStrip';
@@ -62,6 +61,7 @@ function applyDocumentLocale(lang: Lang) {
 
 export default function App() {
   const [lang, setLang] = useState<Lang>(getInitialLang);
+  const lenisRef = useRef<Lenis | null>(null);
 
   const handleToggleLang = (next: Lang) => {
     if (next === lang) return;
@@ -73,6 +73,26 @@ export default function App() {
     applyDocumentLocale(next);
     setLang(next);
   };
+
+  const scrollToElement = useCallback((el: HTMLElement, offset = 0) => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(el, { offset, duration: 0.7 });
+    } else {
+      const top = window.scrollY + el.getBoundingClientRect().top + offset;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    }
+  }, []);
+
+  const setScrollLocked = useCallback((locked: boolean) => {
+    document.body.style.overflow = locked ? 'hidden' : '';
+    if (lenisRef.current) {
+      if (locked) {
+        lenisRef.current.stop();
+      } else {
+        lenisRef.current.start();
+      }
+    }
+  }, []);
 
   // Sync HTML dir, lang, page <title>, meta tags, and refresh ScrollTrigger after DOM & fonts settle
   useEffect(() => {
@@ -105,6 +125,7 @@ export default function App() {
       smoothWheel: true,
       touchMultiplier: 1.5,
     });
+    lenisRef.current = lenis;
 
     lenis.on('scroll', ScrollTrigger.update);
 
@@ -115,8 +136,10 @@ export default function App() {
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      lenisRef.current = null;
       gsap.ticker.remove(tick);
       lenis.destroy();
+      document.body.style.overflow = '';
     };
   }, []);
 
@@ -125,18 +148,22 @@ export default function App() {
       {/* Subtle printed paper grain overlay */}
       <div aria-hidden="true" className="fixed inset-0 z-[80] paper-grain" />
 
-      <CustomCursor />
-      <Navbar lang={lang} onToggleLang={handleToggleLang} />
+      <Navbar
+        lang={lang}
+        onToggleLang={handleToggleLang}
+        onScrollToElement={scrollToElement}
+        onSetScrollLocked={setScrollLocked}
+      />
 
       <main>
         {/* 1. Hero ("THE CUT") */}
-        <HeroBlackout lang={lang} onToggleLang={handleToggleLang} />
+        <HeroBlackout lang={lang} />
 
         {/* 2. The Problem (Horizontal Scroll Strip) */}
         <ProblemStrip lang={lang} />
 
         {/* 3. Meet the Unit (Front & Rear Camera Zoom + 11 Hotspots) */}
-        <UnitTour lang={lang} />
+        <UnitTour lang={lang} onScrollToElement={scrollToElement} />
 
         {/* 4. Runtime Calculator */}
         <RuntimeCalculator lang={lang} />
